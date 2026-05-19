@@ -1,95 +1,109 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
-class Student {
-    String name;
-    int age;
-    double grade;
-
-    Student(String name, int age, double grade) {
-        this.name = name;
-        this.age = age;
-        this.grade = grade;
-    }
-
-    void displayInfo() {
-        System.out.println("Name: " + name);
-        System.out.println("Age: " + age);
-        System.out.println("Grade: " + grade);
-        System.out.println("-------------------");
-    }
-}
-
 public class Main {
+
+    static Scanner sc = new Scanner(System.in);
+    static StudentService service = new StudentService();
+
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
-        ArrayList<Student> students = new ArrayList<>();
+        boolean running = true;
 
-        while (true) {
+        while (running) {
 
-            System.out.println("===== STUDENT MANAGEMENT SYSTEM =====");
+            System.out.println("\n===== STUDENT MANAGEMENT SYSTEM =====");
             System.out.println("1. Add Student");
             System.out.println("2. Show Students");
             System.out.println("3. Average Grade");
-            System.out.println("4. Exit");
+            System.out.println("4. Top Student");
+            System.out.println("5. Search Student");
+            System.out.println("6. Remove Student");
+            System.out.println("7. Exit");
 
             System.out.print("Choose: ");
+
             int choice = sc.nextInt();
 
-            if (choice == 1) {
+            switch (choice) {
 
-                sc.nextLine();
+                case 1:
 
-                System.out.print("Enter name: ");
-                String name = sc.nextLine();
+                    addStudent();
+                    break;
 
-                System.out.print("Enter age: ");
-                int age = sc.nextInt();
+                case 2:
 
-                System.out.print("Enter grade: ");
-                double grade = sc.nextDouble();
+                    service.showStudents();
+                    break;
 
-                students.add(new Student(name, age, grade));
+                case 3:
 
-                System.out.println("Student added successfully!");
+                    service.calculateAverage();
+                    break;
 
-            } else if (choice == 2) {
+                case 4:
 
-                if (students.isEmpty()) {
-                    System.out.println("No students found.");
-                } else {
-                    for (Student s : students) {
-                        s.displayInfo();
-                    }
-                }
+                    service.findTopStudent();
+                    break;
 
-            } else if (choice == 3) {
+                case 5:
 
-                if (students.isEmpty()) {
-                    System.out.println("No grades available.");
-                } else {
+                    searchStudent();
+                    break;
 
-                    double sum = 0;
+                case 6:
 
-                    for (Student s : students) {
-                        sum += s.grade;
-                    }
+                    removeStudent();
+                    break;
 
-                    double average = sum / students.size();
+                case 7:
 
-                    System.out.println("Average Grade: " + average);
-                }
+                    System.out.println("Program ended.");
+                    running = false;
+                    break;
 
-            } else if (choice == 4) {
+                default:
 
-                System.out.println("Program ended.");
-                break;
-
-            } else {
-
-                System.out.println("Invalid choice!");
+                    System.out.println("Invalid choice!");
             }
         }
+    }
+
+    public static void addStudent() {
+
+        sc.nextLine();
+
+        System.out.print("Enter name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter age: ");
+        int age = sc.nextInt();
+
+        System.out.print("Enter grade: ");
+        double grade = sc.nextDouble();
+
+        Student student = new Student(name, age, grade);
+
+        service.addStudent(student);
+    }
+
+    public static void searchStudent() {
+
+        sc.nextLine();
+
+        System.out.print("Enter student name: ");
+        String name = sc.nextLine();
+
+        service.searchStudentByName(name);
+    }
+
+    public static void removeStudent() {
+
+        sc.nextLine();
+
+        System.out.print("Enter student name to remove: ");
+        String name = sc.nextLine();
+
+        service.removeStudent(name);
     }
 }
